@@ -1,20 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch Data and Display</title>
+    <title>UK Towns Map</title>
 
-<!-- Test for update to github -->
+    <!-- Link to D3.js -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 
+    <!-- Link to Esri ArcGIS API -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.27/"></script>
 
-    <script src="https://d3js.org/d3.v7.min.js"></script> <!-- D3.js Library -->
-</head>
-<body>
-    <!-- Paragraph where the fetched data will be displayed -->
-    <p id="data-output">Loading data...</p>
+    <style>
+        #viewDiv { height: 65vh; width: 50vw; }
+    </style>
+  </head>
 
-    <!-- Link to external JavaScript file -->
-    <script src="website.js"></script>
-</body>
+  <body>
+    <!-- Div where the map is displayed -->
+    <div id="viewDiv"></div>
+
+    <!-- Load JavaScript files -->
+    <script src="scripts/script.js"></script>
+    <script src="scripts/onload.js"></script>
+
+  </body>
 </html>
