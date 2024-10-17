@@ -1,8 +1,8 @@
 function setupMap() {
     // Use ArcGIS's AMD module loader to load Esri modules
     require([
-        "esri/Map",
-        "esri/views/MapView",
+        "esri/Map", // To obtain the map template
+        "esri/views/MapView", // To get the specific version of the map
         "esri/Graphic",  // To plot the points on the map
         "esri/layers/GraphicsLayer"  // To hold all the points
     ], function(Map, MapView, Graphic, GraphicsLayer) {
