@@ -1,1 +1,1 @@
-window.onload = setupMap;
+window.onload = setupMap(50);

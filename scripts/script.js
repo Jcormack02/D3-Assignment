@@ -1,11 +1,12 @@
-function setupMap(numTowns = 50) { //default number of towns being 50 if no number is chosen by the user
+function setupMap(numTowns) { //default number of towns being 50 if no number is chosen by the user
     // Use ArcGIS's AMD module loader to load Esri modules
     require([
         "esri/Map",
         "esri/views/MapView",
         "esri/Graphic",  // To plot the points on the map
-        "esri/layers/GraphicsLayer"  // To hold all the points
-    ], function(Map, MapView, Graphic, GraphicsLayer) {
+        "esri/layers/GraphicsLayer",  // To hold all the points
+        "esri/layers/support/LabelClass" // To allow the name of the town to be displayed on the map
+    ], function(Map, MapView, Graphic, GraphicsLayer, LabelClass) {
 
         // Create the map with a 'streets-navigation-vector' basemap
         const map = new Map({
@@ -17,12 +18,36 @@ function setupMap(numTowns = 50) { //default number of towns being 50 if no numb
             container: "viewDiv",
             map: map,
             center: [-4, 55.378051],  // Center on the UK
-            zoom: 5
+            zoom: 5,
         });
 
         // Create a GraphicsLayer to hold the points
         const graphicsLayer = new GraphicsLayer();
-        map.add(graphicsLayer);
+    
+        // Create a LabelClass to display the name of the town on the map
+        const labelClass = new LabelClass({
+            symbol: {
+                type: "text",
+                color: "white",
+                haloColor: "blue",
+                haloSize: "1",
+                font: {
+                    family: "Black Ops One",
+                    style: "normal",
+                    weight: "bold",
+                    size: 14
+                }
+            },
+            labelPlacement: "below-center", // Positions the town name below the dot point on the map
+            labelExpressionInfo: {
+                expression: "$feature.Town" // Applies the town name variable to the label
+            }
+        });
+
+        graphicsLayer.labelingInfo = [labelClass]; // Add the label to the graphics layer where the points are held in
+
+        
+        map.add(graphicsLayer); // Adds the graphics layer on to the map
 
         // Create a scale for the size of the point in relation to population
         const sizeScale = d3.scaleLinear()
@@ -60,8 +85,32 @@ function setupMap(numTowns = 50) { //default number of towns being 50 if no numb
                     }
                 });
 
-                graphicsLayer.add(pointGraphic);
+                graphicsLayer.add(pointGraphic); // Adds the marker on to the map
             });
+
+            // On hover functionality: Display popup when the user hovers over a point
+            view.on("pointer-move", function(event) {
+                view.hitTest(event).then(function(response) {
+                    if (response.results.length) {
+                        // Filter results to get graphics from the GraphicsLayer
+                        const graphic = response.results.filter(function(result) {
+                            return result.graphic.layer === graphicsLayer;
+                        })[0]?.graphic;
+
+                        if (graphic) {
+                            view.popup.open({
+                                location: graphic.geometry,  // Set popup location at the point
+                                features: [graphic]  // Automatically use the graphic's popupTemplate
+                            });
+                        } else {
+                            view.popup.close();  // Close the popup if not hovering over a graphic
+                        }
+                    } else {
+                        view.popup.close();  // Close the popup if not hovering over a graphic
+                    }
+                });
+            });
+
           })
           .catch(function(error) {
             console.error("Error fetching data:", error);
@@ -80,8 +129,3 @@ function updateMap() {
     // Call setupMap with the user input, or default to 50 if input is invalid
     setupMap(numTowns);
 }
-
-// Call setupMap() with 50 as default on page load
-window.onload = function() {
-    setupMap(50);  // Display 50 towns by default
-};
