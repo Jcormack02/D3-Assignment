@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UK Towns Map</title>
-
+    
     <!-- Link to D3.js -->
     <script src="https://d3js.org/d3.v6.min.js"></script>
 
@@ -13,12 +13,20 @@
     <script src="https://js.arcgis.com/4.27/"></script>
 
     <style>
-        #viewDiv { height: 65vh; width: 50vw; overflow: hidden; }
+        #viewDiv { height: 65vh; width: 99.2%; border-style: solid; border-width: 5px; overflow: hidden; }
+        #controlsContainer {background-color: white; display: flex; justify-content: flex-start; align-items: center; margin: 20px; border-style: solid; padding-left: 3%;}
+        #numberOfTownsDiv {margin-right: 30%;}
+        h1 {background-color: white; border-style: solid; text-align: center; margin: 0 auto; width: 50%;}
+        body {font-family:'Times New Roman', Times, serif; background-color:rgba(75, 29, 112, 0.801) ;font-weight: bold; font-size: 20px;}
     </style>
+
 
   </head>
 
   <body>
+
+    <h1>Map of Towns in the UK</h1>
+
     <!-- Div where the map is displayed -->
     <div id="viewDiv"></div>
 
@@ -26,29 +34,35 @@
     <script src="scripts/script.js"></script>
     <script src="scripts/onload.js"></script>
 
-    <!-- Form to allow the user to change the number of towns that are shown on the map -->
-    <form onsubmit="event.preventDefault(); updateMap();"> <!-- This allows the user to press the enter button instead of the submit button for easier use -->
-      <label for="quantity">How many towns would you like to see? (Between 1 and 500) <br> </label>
-      <input type="number" id="quantity" name="quantity" min="1" max="500"> <!-- Button which has the max and min values the user can input -->
-      <button type="button" onclick="updateMap()"> Submit</button> <!-- The submit button if the user wishes to use this method -->
-    </form>
-    
+    <div id="controlsContainer">
+      <div id="numberOfTownsDiv">
+      <!-- Form to allow the user to change the number of towns that are shown on the map -->
+      <form onsubmit="event.preventDefault(); updateMap();"> <!-- This allows the user to press the enter button instead of the submit button for easier use -->
+        <label for="quantity">How many towns would you like to see? (Between 1 and 500) <br> </label>
+        <input type="number" id="quantity" name="quantity" min="1" max="500"> <!-- Button which has the max and min values the user can input -->
+        <button type="button" onclick="updateMap()"> Submit</button> <!-- The submit button if the user wishes to use this method -->
+      </form>
+      </div>
+      
+      <div id="changeMapDiv">
 
         <!-- Dropdown for basemap selection -->
-    <label for="basemapSelector">Pick a Map:</label>
-    <select id="basemapSelector" onchange="changeBasemap()">
-      <option value="dark-gray-vector">Dark Grey</option>
-      <option value="gray-vector">Light Grey</option>
-      <option value="hybrid">Much Detail</option>
-      <option value="oceans">Oceans Included</option>
-      <option value="osm">Map with borders around countries</option>
-      <option value="satellite">Satellite</option>
-      <option value="streets-navigation-vector">Plain</option>
-      <option value="streets-night-vector">Plain Dark Mode</option>
-      <option value="streets-relief-vector">Plain Light Mode</option>
-      <option value="terrain">Snowy</option>
-      <option value="topo-vector">Ye Olde </option>
-    </select>
+      <label for="basemapSelector">Pick a Map:</label>
+      <select id="basemapSelector" onchange="changeBasemap()">
+        <option value="dark-gray-vector">Dark Grey</option>
+        <option value="gray-vector">Light Grey</option>
+        <option value="hybrid">Much Detail</option>
+        <option value="oceans">Oceans Included</option>
+        <option value="osm">Map with borders around countries</option>
+        <option value="satellite">Satellite</option>
+        <option value="streets-navigation-vector">Plain</option>
+        <option value="streets-night-vector">Plain Dark Mode</option>
+        <option value="streets-relief-vector">Plain Light Mode</option>
+        <option value="terrain">Snowy</option>
+        <option value="topo-vector">Ye Olde </option>
+        </select>
+      </div>
+    </div>
   
   </body>
 </html>
