@@ -15,6 +15,7 @@
     <style>
         #viewDiv { height: 65vh; width: 50vw; overflow: hidden; }
     </style>
+
   </head>
 
   <body>
@@ -32,6 +33,22 @@
       <button type="button" onclick="updateMap()"> Submit</button> <!-- The submit button if the user wishes to use this method -->
     </form>
     
+
+        <!-- Dropdown for basemap selection -->
+    <label for="basemapSelector">Pick a Map:</label>
+    <select id="basemapSelector" onchange="changeBasemap()">
+      <option value="dark-gray-vector">Dark Grey</option>
+      <option value="gray-vector">Light Grey</option>
+      <option value="hybrid">Much Detail</option>
+      <option value="oceans">Oceans Included</option>
+      <option value="osm">Map with borders around countries</option>
+      <option value="satellite">Satellite</option>
+      <option value="streets-navigation-vector">Plain</option>
+      <option value="streets-night-vector">Plain Dark Mode</option>
+      <option value="streets-relief-vector">Plain Light Mode</option>
+      <option value="terrain">Snowy</option>
+      <option value="topo-vector">Ye Olde </option>
+    </select>
   
   </body>
 </html>

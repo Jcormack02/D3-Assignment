@@ -1,4 +1,4 @@
-function setupMap(numTowns) { //default number of towns being 50 if no number is chosen by the user
+function setupMap(numTowns, basemap) { //default number of towns being 50 if no number is chosen by the user
     // Use ArcGIS's AMD module loader to load Esri modules
     require([
         "esri/Map",
@@ -10,7 +10,7 @@ function setupMap(numTowns) { //default number of towns being 50 if no number is
 
         // Create the map with a 'streets-navigation-vector' basemap
         const map = new Map({
-            basemap: "streets-navigation-vector"
+            basemap: basemap
         });
 
         // Create a MapView to display the map in the 'viewDiv' container
@@ -98,15 +98,15 @@ function setupMap(numTowns) { //default number of towns being 50 if no number is
                         })[0]?.graphic;
 
                         if (graphic) {
-                            view.popup.open({
+                            view.openPopup({
                                 location: graphic.geometry,  // Set popup location at the point
                                 features: [graphic]  // Automatically use the graphic's popupTemplate
                             });
                         } else {
-                            view.popup.close();  // Close the popup if not hovering over a graphic
+                            view.closePopup();  // Close the popup if not hovering over a graphic
                         }
                     } else {
-                        view.popup.close();  // Close the popup if not hovering over a graphic
+                        view.closePopup();  // Close the popup if not hovering over a graphic
                     }
                 });
             });
@@ -123,9 +123,36 @@ function updateMap() {
     // Get the user input for the number of towns
     const numTowns = document.getElementById("quantity").value;
 
+    // Clear any existing error message
+    const errorMessage = document.getElementById("error-message");
+    if (errorMessage) {
+        errorMessage.remove();
+    }
+
+    // Displays an error message for the user if the input is not valid (not needed for user pressing enter on keyboard as this has a check already)
+    if (isNaN(numTowns) || numTowns < 1 || numTowns > 500) {
+        const errorDiv = document.createElement("div");
+        errorDiv.id = "error-message"; // Obtains the id for the error message
+        errorDiv.style.color = "red"; // Displays the text in red
+        errorDiv.textContent = "Please enter a valid number between 1 and 500."; // Message displayed to the user
+        document.body.appendChild(errorDiv); // Applies the error message on the html page
+        return;  // Stop execution if the input is invalid
+    }
+    
+
     // Clear the current map (you can implement a method to clear the previous data if needed)
     document.getElementById("viewDiv").innerHTML = "";  // This will reset the map view div
 
     // Call setupMap with the user input, or default to 50 if input is invalid
-    setupMap(numTowns);
+    setupMap(numTowns, currentBasemap);
 }
+
+// Function to change the basemap based on user selection
+function changeBasemap() {
+    const basemapSelector = document.getElementById("basemapSelector");
+    currentBasemap = basemapSelector.value;
+    
+    // Redraw the map with the new basemap and current number of towns
+    const numTowns = document.getElementById("quantity").value || 50;  // Default to 50 towns if none selected
+    setupMap(numTowns, currentBasemap);
+    }
