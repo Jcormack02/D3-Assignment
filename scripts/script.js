@@ -1,4 +1,6 @@
-function setupMap(numTowns, basemap) { //default number of towns being 50 if no number is chosen by the user
+// Function to set up the map with either the default values or the values and map specification given by the user
+function setupMap(numTowns, basemap) { 
+
     // Use ArcGIS's AMD module loader to load Esri modules
     require([
         "esri/Map",
@@ -24,27 +26,28 @@ function setupMap(numTowns, basemap) { //default number of towns being 50 if no 
         // Create a GraphicsLayer to hold the points
         const graphicsLayer = new GraphicsLayer();
     
-        // Create a LabelClass to display the name of the town on the map
-        const labelClass = new LabelClass({
-            symbol: {
-                type: "text",
-                color: "white",
-                haloColor: "blue",
-                haloSize: "1",
-                font: {
-                    family: "Black Ops One",
-                    style: "normal",
-                    weight: "bold",
-                    size: 14
-                }
-            },
-            labelPlacement: "below-center", // Positions the town name below the dot point on the map
-            labelExpressionInfo: {
-                expression: "$feature.Town" // Applies the town name variable to the label
-            }
-        });
+        /// THIS CODE DIDN'T WORK SO IT IS COMMENTED OUT
+        // // Create a LabelClass to display the name of the town on the map 
+        // const labelClass = new LabelClass({
+        //     symbol: {
+        //         type: "text",
+        //         color: "white",
+        //         haloColor: "blue",
+        //         haloSize: "1",
+        //         font: {
+        //             family: "Black Ops One",
+        //             style: "normal",
+        //             weight: "bold",
+        //             size: 14
+        //         }
+        //     },
+        //     labelPlacement: "below-center", // Positions the town name below the dot point on the map
+        //     labelExpressionInfo: {
+        //         expression: "$feature.Town" // Applies the town name variable to the label
+        //     }
+        // });
 
-        graphicsLayer.labelingInfo = [labelClass]; // Add the label to the graphics layer where the points are held in
+        // graphicsLayer.labelingInfo = [labelClass]; // Add the label to the graphics layer where the points are held in
 
         
         map.add(graphicsLayer); // Adds the graphics layer on to the map
@@ -71,15 +74,15 @@ function setupMap(numTowns, basemap) { //default number of towns being 50 if no 
                     geometry: point,
                     symbol: {
                         type: "simple-marker",
-                        color: "rgba(255, 0, 0, 0.6)", //This makes the red slightly opaque
+                        color: "rgba(255, 0, 0, 0.6)", // This makes the red slightly opaque
                         size: sizeScale(location.Population), // Setting the size of the dot in relation to the population size
                         outline: {
-                            color: "rgba(0, 0, 0, 0.3)",  // Optional: add a semi-transparent outline
+                            color: "rgba(0, 0, 0, 0.3)", // Adds an outline on the dot to help be more pronounced
                             width: 1
                         }
                     },
                     attributes: location,
-                    popupTemplate: {
+                    popupTemplate: { // Creates the popup template to hold the town name, population and county
                         title: location.Town,
                         content: `Population: ${location.Population} <br> County: ${location.County}`
                     }
